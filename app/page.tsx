@@ -1,62 +1,58 @@
-import Image from 'next/image'
+'use client';
+
 import {
   Flex,
   Box,
-  FormControl,
-  FormLabel,
-  Input,
   Stack,
-  Button,
   Heading,
-  Text,
   Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+} from '@chakra-ui/react';
+import Login from '@/components/auth/Login';
+import SignUp from '@/components/auth/SignUp';
+import { useEffect, useState } from 'react';
+import { useUserStore } from '@/stores/user.store';
+import { useRouter } from 'next/navigation';
 
-} from '@chakra-ui/react'
+const Auth = () => {
+  const [tabIndex, setTabIndex] = useState(0);
+  const { accessToken } = useUserStore();
+  const router = useRouter();
 
+  useEffect(() => {
+    if (accessToken) {
+      router.push('/dashboard');
+    }
+  }, [accessToken, router]);
 
- const Login = ()=> {
   return (
-    <Flex
-      minH={'100vh'}
-      align={'center'}
-      justify={'center'}
-      bg={"gray.50"}>
-      <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+    <Flex minH={'100vh'} w="100%" align={'center'} justify={'center'} bg={'gray.50'}>
+      <Stack spacing={8} mx={'auto'} alignItems={'center'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'}>
-          <Heading fontSize={'4xl'}>Sign in to your account</Heading>
-          <Text fontSize={'lg'} color={'gray.600'}>
-            to enjoy all of our cool <Text color={'blue.400'}>features</Text> ✌️
-          </Text>
+          <Heading fontSize={'4xl'}>{tabIndex === 0 ? 'Sign in  to your account' : 'Sign up now'}</Heading>
         </Stack>
-        <Box
-          rounded={'lg'}
-          bg={"white"}
-          boxShadow={'lg'}
-          p={8}>
-          <Stack spacing={4}>
-            <FormControl id="email">
-              <FormLabel>Email address</FormLabel>
-              <Input type="email" />
-            </FormControl>
-            <FormControl id="password">
-              <FormLabel>Password</FormLabel>
-              <Input type="password" />
-            </FormControl>
-            <Stack spacing={10}>
-              <Button
-                bg={'blue.400'}
-                color={'white'}
-                _hover={{
-                  bg: 'blue.500',
-                }}>
-                Sign in
-              </Button>
-            </Stack>
-          </Stack>
+        <Box w={'lg'} mx="auto" rounded={'lg'} bg={'white'} boxShadow={'lg'} p={8}>
+          <Tabs index={tabIndex} onChange={(index) => setTabIndex(index)}>
+            <TabList>
+              <Tab>Sign In</Tab>
+              <Tab>Sign Up</Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>
+                <Login />
+              </TabPanel>
+              <TabPanel>
+                <SignUp setTabIndex={setTabIndex} />
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
         </Box>
       </Stack>
     </Flex>
-  )
-}
+  );
+};
 
-export default Login
+export default Auth;
