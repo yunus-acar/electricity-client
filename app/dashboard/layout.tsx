@@ -14,29 +14,29 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const { mutateAsync } = useMutation(refresh);
   const router = useRouter();
 
-  // const handleRefreshToken = async () => {
-  //   try {
-  //     const result = await mutateAsync({
-  //       refresh: refreshToken as string,
-  //     });
-  //     if (result) {
-  //       setAccessToken(result.access);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     logout();
-  //     await logOut({
-  //       refreshToken: refreshToken as string,
-  //     });
-  //     router.push('/');
-  //   }
-  // };
+   const handleRefreshToken = async () => {
+     try {
+       const result = await mutateAsync({
+         refresh: refreshToken as string,
+       });
+       if (result) {
+         setAccessToken(result.access);
+       }
+     } catch (error) {
+       console.log(error);
+       logout();
+       await logOut({
+         refreshToken: refreshToken as string,
+       });
+       router.push('/');
+     }
+   };
 
-  // useEffect(() => {
-  //   if (refreshToken) {
-  //     handleRefreshToken();
-  //   }
-  // }, []);
+   useEffect(() => {
+     if (refreshToken) {
+       handleRefreshToken();
+     }
+   }, []);
 
   useEffect(() => {
     if (!accessToken) {
